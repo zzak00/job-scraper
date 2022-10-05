@@ -12,6 +12,7 @@ receiver_id = 799755225
 HEADERS ={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"}
 
 def flatten_list(list_of_lists):
+    # flatten a list of lists
     return [item for sublist in list_of_lists for item in sublist]
 
 def get_jobs_list(url, job_title, location, page_number):
@@ -41,6 +42,7 @@ def get_job_details(jobs_list, country, titles, companies, links, dates):
     return titles, companies, links, dates
 
 def scrape_jobs(website, country, job_title, location):
+    # data to scrape
     titles, companies, links, dates = [], [], [], []
     if website == 'indeed':
         if country == 'ca':
@@ -56,13 +58,21 @@ def scrape_jobs(website, country, job_title, location):
         dates = flatten_list(dates)
         return pd.DataFrame({'Job Title': titles, 'Company': companies, 'Link': links, 'Date': dates})
 
+"""
+from urllib.parse import urlparse, parse_qs
+URL='https://ma.indeed.com/jobs?q=data+scientist&l=Casablanca&radius=0&fromage=1&vjk=200ef90494131fbd'
+parsed_url = urlparse(URL)
+parse_qs(parsed_url.query)"""
+
 
 def send_telegram_message(token, df):
+    # send a message to the telegram bot
     bot = telepot.Bot(token)
     for index, row in df.iterrows():
         bot.sendMessage(receiver_id, row['Job Title'] + ' - ' + row['Company'] + ' - ' + row['Link'])
 
 def main(csv_file, job_title, location, country):
+    # scrape jobs and compare with the csv file
     df_old = pd.read_csv(csv_file)
     found = False
 
