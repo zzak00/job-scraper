@@ -22,6 +22,7 @@ def get_jobs_list(url, job_title, location, page_number):
     query_args = {'q': job_title, 'l': location, 'fromage': 1, 'start' : page_number}
     # designate the base url
     url_cpt = url+urllib.parse.urlencode(query_args)
+    print(url_cpt)
     page = requests.get(url_cpt, headers=HEADERS)
     soup = BeautifulSoup(page.content, 'html.parser')
     return soup.find(class_="jobsearch-ResultsList")
@@ -49,6 +50,9 @@ def scrape_jobs(website, country, job_title, location):
             url = 'http://ca.indeed.com/jobs?'
         elif country == 'ma':
             url = 'http://ma.indeed.com/jobs?'
+        elif country == 'fr':
+            url = 'http://fr.indeed.com/jobs?'
+
         for page_number in range(0, 21, 10):
             jobs_list = get_jobs_list(url, job_title, location, page_number)
             get_job_details(jobs_list, country, titles, companies, links, dates)
@@ -92,8 +96,9 @@ def main(csv_file, job_title, location, country):
 
 
 if __name__ == '__main__':
-    job_title = 'data scientist'
+    job_title = 'stage data science'
     location = ''
     
-    main('jobs_ca.csv', job_title, location, 'ca')
-    main('jobs_ma.csv', job_title, location, 'ma')
+    #main('jobs_ca.csv', job_title, location, 'ca')
+    #main('jobs_ma.csv', job_title, location, 'ma')
+    main('jobs_fr.csv', job_title, location, 'fr')
