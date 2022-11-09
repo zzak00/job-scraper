@@ -90,8 +90,8 @@ def main(csv_file, job_title, location, country):
 
     if found:
         df_new = pd.concat([df_old, df]).drop_duplicates(keep=False)
-        if not df_new.empty:
-            send_telegram_message(token, df_new)
+        """if not df_new.empty:
+            send_telegram_message(token, df_new)"""
 
 
 
